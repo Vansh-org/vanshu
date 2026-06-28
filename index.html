@@ -104,7 +104,6 @@
         #yesBtn {
             background-color: #ffffff;
             color: #ff4757;
-            order: 1; 
         }
 
         #yesBtn:hover {
@@ -115,7 +114,8 @@
         #noBtn {
             background-color: #ff4757;
             color: #ffffff;
-            order: 2; 
+            /* Added smooth transition for position movement */
+            transition: left 0.1s ease, top 0.1s ease;
         }
     </style>
 </head>
@@ -126,29 +126,38 @@
         <p class="birthday-wish">✨ Happy Birthday, Vanshu! ✨</p>
         <h1>Will you forever be mine and be my girlfriend? 👑</h1>
         
-        <!-- Guaranteed Permanent CDN link for the Cat Image -->
-        <img src="cat-rose.jpg">
+        <img class="proposal-img" src="cat-rose.jpg" alt="Proposal Image">
         
         <div class="btn-container">
             <button id="yesBtn" onclick="celebrate()">Yes 💖</button>
-            <button id="noBtn" onmouseenter="swapButtons()" onpointerenter="swapButtons()">No 😢</button>
+            <button id="noBtn" onmouseenter="moveNoButton()" onpointerenter="moveNoButton()">No 😢</button>
         </div>
     </div>
 
     <script>
-        function swapButtons() {
-            const yesBtn = document.getElementById('yesBtn');
+        function moveNoButton() {
             const noBtn = document.getElementById('noBtn');
             
-            const yesOrder = window.getComputedStyle(yesBtn).order;
+            // Switch button to absolute positioning so it can break out of the card container
+            noBtn.style.position = 'absolute';
             
-            if (yesOrder === "1") {
-                yesBtn.style.order = "2";
-                noBtn.style.order = "1";
-            } else {
-                yesBtn.style.order = "1";
-                noBtn.style.order = "2";
-            }
+            // Get the absolute dimensions of the screen and the button
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            
+            // Calculate maximum available safe zones so the button never runs off the screen edge
+            const maxX = screenWidth - btnWidth - 20; // 20px padding safety margin
+            const maxY = screenHeight - btnHeight - 20;
+            
+            // Generate completely random coordinates inside the safe zone
+            const randomX = Math.max(20, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(20, Math.floor(Math.random() * maxY));
+            
+            // Apply the coordinates
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
         }
 
         function celebrate() {
@@ -156,5 +165,4 @@
         }
     </script>
 </body>
-        </html>
-        
+</html>
